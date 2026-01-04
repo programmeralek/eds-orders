@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:mysql://localhost:3310/orders_db
+    username: orders_user
+    password: orders_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  eureka:
+    client:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+  server:
+      port: 8081
