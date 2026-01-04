@@ -1,4 +1,4 @@
-#Orders Service
+# Orders Service
 
 The Orders Service is a Java 25 + Spring Boot 4 microservice responsible for authoritatively managing order creation and persistence within an event-driven architecture.
 
