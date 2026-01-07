@@ -6,6 +6,7 @@ import com.eds.orders.api.dto.CreateOrderResponse;
 import com.eds.orders.domain.model.Order;
 import com.eds.orders.domain.model.OrderItem;
 import com.eds.orders.service.OrderApplicationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateOrderResponse createOrder(@RequestBody CreateOrderRequest request) {
+    public CreateOrderResponse createOrder(@Valid @RequestBody CreateOrderRequest request) {
 
         List<OrderItem> items = request.getItems().stream()
                 .map(this::toDomainItem)
