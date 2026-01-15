@@ -5,3 +5,10 @@ The Orders Service is a Java 25 + Spring Boot 4 microservice responsible for aut
 It enforces ACID-compliant transactional boundaries using Spring Data JPA (Hibernate) with a MySQL datastore managed via Flyway migrations. The service exposes a minimal REST API for order intake and publishes post-commit Kafka domain events, ensuring only durable state changes are propagated.
 
 The service is fully dockerized, registers with Eureka for service discovery, and is designed as an autonomous, single-responsibility component within a polyglot microservices ecosystem.
+
+
+
+### Technical Details 
+
+Kafka publishing is performed synchronously.
+When Kafka is unavailable, API responses may be delayed until producer failure occurs, after which events are persisted for retry.

@@ -1,5 +1,6 @@
 package com.eds.orders.service;
 
+import com.eds.orders.domain.event.EventPublishStatus;
 import com.eds.orders.domain.event.OrderCreatedEvent;
 import com.eds.orders.domain.model.Order;
 import com.eds.orders.domain.model.OrderItem;
@@ -7,8 +8,6 @@ import com.eds.orders.domain.repository.OrderRepository;
 import com.eds.orders.infrastructure.messaging.OrderEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -26,27 +25,24 @@ public class OrderApplicationService {
     @Transactional
     public Order createOrder(List<OrderItem> items) {
         Order order = Order.create(items);
-        Order saved = orderRepository.save(order);
-        TransactionSynchronizationManager.registerSynchronization(
-                new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                            eventPublisher.publish(
-                                    new OrderCreatedEvent(
-                                    saved.getId(),
-                                    saved.getTotalAmount(),
-                                    saved.getItems().stream()
-                                            .map(item -> new OrderCreatedEvent.Item(
-                                                    item.getProductId(),
-                                                    item.getQuantity()
-                                            ))
-                                            .toList()
-
-                            )
-                        );
-                    }
-                }
-        );
         return orderRepository.save(order);
+    }
+
+    public EventPublishStatus publishOrderCreatedEvent(Order order) {
+
+        OrderCreatedEvent event = new OrderCreatedEvent(
+                order.getId(),
+                order.getTotalAmount(),
+                order.getItems().stream()
+                        .map(item -> new OrderCreatedEvent.Item(
+                                item.getProductId(),
+                                item.getQuantity()
+                        ))
+                        .toList()
+        );
+
+        // No transaction is active here — publish directly
+        // If Kafka is down, publisher will persist pending_events
+        return eventPublisher.publish(event);
     }
 }

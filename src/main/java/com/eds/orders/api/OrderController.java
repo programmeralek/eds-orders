@@ -9,6 +9,7 @@ import com.eds.orders.service.OrderApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.eds.orders.domain.event.EventPublishStatus;
 
 import java.util.List;
 
@@ -32,11 +33,14 @@ public class OrderController {
 
         Order order = orderApplicationService.createOrder(items);
 
+        EventPublishStatus publishStatus = orderApplicationService.publishOrderCreatedEvent(order);
+
         return new CreateOrderResponse(
                 order.getId(),
                 order.getStatus().name(),
                 order.getTotalAmount(),
-                order.getCreatedAt()
+                order.getCreatedAt(),
+                publishStatus
         );
     }
 
