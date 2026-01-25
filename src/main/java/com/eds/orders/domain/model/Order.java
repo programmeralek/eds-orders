@@ -54,6 +54,23 @@ public class Order {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void markInventoryReserved() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new IllegalStateException(
+                    "Cannot reserve inventory for order in status: " + this.status
+            );
+        }
+        this.status = OrderStatus.INVENTORY_RESERVED;
+    }
+
+    public void markInventoryRejected() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new IllegalStateException(
+                    "Cannot reject inventory for order in status: " + this.status
+            );
+        }
+        this.status = OrderStatus.INVENTORY_REJECTED;
+    }
     // Read-only accessors
 
     public Long getId() {

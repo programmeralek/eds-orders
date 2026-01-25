@@ -1,5 +1,9 @@
 server:
   port: 8081
+app:
+  kafka:
+    inventoryReservationSucceededTopic: inventory.reservation.succeeded
+    inventoryReservationFailedTopic: inventory.reservation.failed
 spring:
   application:
     name: order-service
@@ -21,6 +25,14 @@ spring:
     baseline-on-migrate: false
   kafka:
     bootstrap-servers: localhost:9092
+    consumer:
+      group-id: order-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
 eureka:
   instance:
     prefer-ip-address: true

@@ -55,21 +55,5 @@ public class OrderEventPublisher {
         }
     }
 
-//    public EventPublishStatus publishRaw(
-//            String eventType,
-//            Long aggregateId,
-//            String payload
-//    ) {
-//        try {
-//            rawKafkaTemplate.send(
-//                    eventType,
-//                    aggregateId.toString(),
-//                    payload
-//            );
-//            return EventPublishStatus.PUBLISHED;
-//        } catch (Exception ex) {
-//            return EventPublishStatus.PENDING_RETRY;
-//        }
-//    }
 
 }
