@@ -71,6 +71,24 @@ public class Order {
         }
         this.status = OrderStatus.INVENTORY_REJECTED;
     }
+
+    public void markPaymentSucceeded() {
+        if (this.status != OrderStatus.INVENTORY_RESERVED) {
+            throw new IllegalStateException(
+                    "Payment can only succeed for INVENTORY_RESERVED orders. Current status: " + this.status
+            );
+        }
+        this.status = OrderStatus.PAID;
+    }
+
+    public void markPaymentFailed(String reason) {
+        if (this.status != OrderStatus.INVENTORY_RESERVED) {
+            throw new IllegalStateException(
+                    "Payment can only fail for INVENTORY_RESERVED orders. Current status: " + this.status
+            );
+        }
+        this.status = OrderStatus.PAYMENT_FAILED;
+    }
     // Read-only accessors
 
     public Long getId() {

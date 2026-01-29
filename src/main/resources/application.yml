@@ -4,6 +4,8 @@ app:
   kafka:
     inventoryReservationSucceededTopic: inventory.reservation.succeeded
     inventoryReservationFailedTopic: inventory.reservation.failed
+    billingPaymentSucceededTopic: billing.payment.succeeded
+    billingPaymentFailedTopic: billing.payment.failed
 spring:
   application:
     name: order-service
